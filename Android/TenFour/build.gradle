@@ -1,7 +1,7 @@
 apply plugin: 'android'
 
 project.ext {
-    GOLGI_DIR = "$System.env.HOME" + '/Golgi-Apple-Pkg/v2-02-10'
+    GOLGI_DIR = "$System.env.HOME" + '/Golgi-Pkg/v2-03-01'
     GOLGI_THRIFT_FILE = "../../TenFour.thrift"
     GOLGI_DEV_KEY_FILE = "../../Golgi.DevKey"
     GOLGI_APP_KEY_FILE = "../../Golgi.AppKey"
