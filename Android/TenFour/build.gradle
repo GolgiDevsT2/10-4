@@ -42,12 +42,12 @@ apply from: project.GOLGI_DIR + '/Android/golgi.gradle'
 // apply from: '../../10-4.Signage.gradle'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.1"
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 19
+        targetSdkVersion 20
         versionCode 110100
         versionName "1.1"
     }
