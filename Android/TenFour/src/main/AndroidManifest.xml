@@ -26,10 +26,10 @@
         <!--
           {BEGIN} GOLGI
         -->
+        <meta-data android:value="io.golgi.example.tenfour.GolgiService" android:name="GolgiServiceClassName"/>
         <service android:exported="true" android:name=".GolgiService"/>
-        <service android:name=".GolgiGCMIntentService" />
         <receiver
-            android:name=".GolgiGCMBroadcastReceiver"
+            android:name="io.golgi.apiimpl.android.GolgiGCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

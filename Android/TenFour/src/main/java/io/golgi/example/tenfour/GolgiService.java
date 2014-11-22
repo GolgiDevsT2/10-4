@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import com.openmindnetworks.golgi.api.GolgiAPI;
 import com.openmindnetworks.golgi.api.GolgiAPIHandler;
 
+import io.golgi.apiimpl.android.GolgiAbstractService;
 import io.golgi.example.tenfour.gen.GolgiKeys;
 import io.golgi.example.tenfour.gen.TenFourService.*;
 import io.golgi.example.tenfour.gen.VoxPacket;
@@ -15,7 +16,7 @@ import io.golgi.example.tenfour.gen.VoxPacket;
 /**
  * Created by briankelly on 10/04/2014.
  */
-public class GolgiService extends io.golgi.apiimpl.android.GolgiService {
+public class GolgiService extends GolgiAbstractService {
     private static GolgiService theInstance;
     private PlaybackEngine playbackEngine;
 
@@ -33,25 +34,17 @@ public class GolgiService extends io.golgi.apiimpl.android.GolgiService {
         return false;
     }
 
-    public static void startService(Context context){
-        if(!isRunning(context)) {
-            DBG("Starting Golgi Service");
-            Intent serviceIntent = new Intent();
-            serviceIntent.setClassName("io.golgi.example.tenfour", "io.golgi.example.tenfour.GolgiService");
-            context.startService(serviceIntent);
-            DBG("Done");
-        }
-        else{
-            DBG("Service is already running");
-        }
-    }
+    @Override
+    public void readyForRegister(){
 
+        if(theInstance == null) {
+            theInstance = this;
+            playbackEngine = new PlaybackEngine(this);
+        }
 
-    private void registerGolgi(String id) {
-        GolgiAPI.getInstance().register(
-                GolgiKeys.DEV_KEY,
-                GolgiKeys.APP_KEY,
-                id,
+        broadcastPacket.registerReceiver(inboundBroadcastPacket);
+
+        registerGolgi(
                 new GolgiAPIHandler() {
                     @Override
                     public void registerSuccess(){
@@ -64,40 +57,10 @@ public class GolgiService extends io.golgi.apiimpl.android.GolgiService {
                         DBG("Golgi registration Failure");
                         TenFourActivity.golgiServiceStarted(false);
                     }
-                }
-        );
-    }
-
-
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        DBG("onStartCommand() called");
-        super.onStartCommand(intent, flags, startId);
-        DBG("onStartCommand() complete");
-
-        String id = getGolgiId(this);
-        registerGolgi(id);
-        DBG("Registering with Golgi as '" + id + "'");
-
-        return START_STICKY;
-
-    }
-
-
-    @Override
-    public void onCreate(){
-        theInstance = this;
-        playbackEngine = new PlaybackEngine(this);
-        broadcastPacket.registerReceiver(inboundBroadcastPacket);
-        super.onCreate();
-        DBG("onCreate()");
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        DBG("onDestroy()");
+                },
+                GolgiKeys.DEV_KEY,
+                GolgiKeys.APP_KEY,
+                getGolgiId(this));
     }
 
     public static boolean isPlayingAudio(){

@@ -43,7 +43,7 @@ apply from: project.GOLGI_DIR + '/Android/golgi.gradle'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
+    buildToolsVersion "20"
 
     defaultConfig {
         minSdkVersion 9
